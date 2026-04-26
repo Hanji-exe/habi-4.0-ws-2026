@@ -1,0 +1,1 @@
+This is a B2B SaaS React Native + Expo app using TypeScript, NativeWind, Expo Router, and Supabase. Use functional components and hooks only. All styles use NativeWind className props. Navigation uses Expo Router file-based routing. Backend calls go through Supabase client in lib/supabase.ts. AI assistant calls go through the Supabase Edge Function at /functions/v1/ai-assistant.
