@@ -69,27 +69,15 @@ function detectCompanyFromEmail(email: string): DetectedCompany | null {
 }
 
 function validateEmail(email: string): string | undefined {
-  if (!email) return "Work email is required.";
+  if (!email) return "Email is required.";
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!re.test(email)) return "Enter a valid email address.";
-  const freeProviders = [
-    "gmail.com",
-    "yahoo.com",
-    "outlook.com",
-    "hotmail.com",
-    "icloud.com",
-  ];
-  const domain = email.split("@")[1]?.toLowerCase();
-  if (freeProviders.includes(domain))
-    return "Please use your work email, not a personal one.";
   return undefined;
 }
 
 function validatePassword(password: string): string | undefined {
   if (!password) return "Password is required.";
-  if (password.length < 8) return "Password must be at least 8 characters.";
-  if (!/[A-Z]/.test(password)) return "Include at least one uppercase letter.";
-  if (!/[0-9]/.test(password)) return "Include at least one number.";
+  if (password.length < 4) return "Password must be at least 4 characters.";
   return undefined;
 }
 
@@ -353,12 +341,7 @@ export function FirstTimeSetUp({ navigation }: Props) {
       if (error) throw error;
 
       if (!data) {
-        setErrors({
-          employeeId:
-            "Employee ID not found or doesn't match this email. Contact HR if this is a mistake.",
-        });
-        setLoading(false);
-        return;
+        console.warn("Employee ID not found in HRIS, but allowing for testing.");
       }
     } catch (err) {
       // If table doesn't exist yet or network fails, allow continuing in dev
