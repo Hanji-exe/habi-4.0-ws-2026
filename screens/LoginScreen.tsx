@@ -5,6 +5,8 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from '../components/Button';
 import type { RootStackParamList } from '../navigation/types.ts';
 
+import { supabase } from '../lib/supabase';
+
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 export function LoginScreen({ navigation }: Props) {
@@ -22,9 +24,20 @@ export function LoginScreen({ navigation }: Props) {
 
     setLoading(true);
     try {
-      // Mock auth: add your real auth later.
-      await new Promise((r) => setTimeout(r, 600));
-      navigation.replace('MainTabs');
+      const { error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
+
+      if (error) {
+        Alert.alert('Login failed', error.message);
+        return;
+      }
+
+      // Navigate to Loading to trigger the onboarding/profile check
+      navigation.replace('Loading');
+    } catch (err: any) {
+      Alert.alert('Error', err.message || 'An unexpected error occurred.');
     } finally {
       setLoading(false);
     }
