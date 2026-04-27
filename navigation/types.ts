@@ -2,5 +2,6 @@ export type RootStackParamList = {
   Loading: undefined;
   Login: undefined;
   MainTabs: undefined;
+  FirstTimeSetUp: undefined;
 };
 

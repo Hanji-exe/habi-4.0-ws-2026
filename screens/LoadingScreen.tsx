@@ -4,11 +4,41 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import type { RootStackParamList } from "../navigation/types.ts";
 
+import { supabase } from "../lib/supabase";
+
 type Props = NativeStackScreenProps<RootStackParamList, "Loading">;
 
 export function LoadingScreen({ navigation }: Props) {
   useEffect(() => {
-    const timer = setTimeout(() => navigation.replace("Login"), 1400);
+    async function checkState() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (!session) {
+          navigation.replace("Login");
+          return;
+        }
+
+        // Check if user has completed onboarding
+        // Note: We use .maybeSingle() to handle cases where the profile doesn't exist yet
+        const { data: profile, error } = await supabase
+          .from("profiles")
+          .select("onboarding_completed")
+          .eq("id", session.user.id)
+          .maybeSingle();
+
+        if (error || !profile?.onboarding_completed) {
+          navigation.replace("FirstTimeSetUp");
+        } else {
+          navigation.replace("MainTabs");
+        }
+      } catch (err) {
+        console.error("Auth check error:", err);
+        navigation.replace("Login");
+      }
+    }
+
+    const timer = setTimeout(checkState, 1400);
     return () => clearTimeout(timer);
   }, [navigation]);
 
