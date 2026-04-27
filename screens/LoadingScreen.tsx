@@ -3,12 +3,43 @@ import { ActivityIndicator, Text, View } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import type { RootStackParamList } from "../navigation/types.ts";
+import { supabase } from "../lib/supabase";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Loading">;
 
 export function LoadingScreen({ navigation }: Props) {
   useEffect(() => {
-    const timer = setTimeout(() => navigation.replace("Arrival"), 1400);
+    async function checkState() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (!session) {
+          // If no session, go to Login
+          navigation.replace("Login");
+          return;
+        }
+
+        // Check if user has completed onboarding
+        const { data: profile, error } = await supabase
+          .from("profiles")
+          .select("onboarding_completed")
+          .eq("id", session.user.id)
+          .maybeSingle();
+
+        if (error || !profile?.onboarding_completed) {
+          // If profile error or not completed, start your new Onboarding Journey
+          navigation.replace("Arrival");
+        } else {
+          // If everything is ready, go to Dashboard
+          navigation.replace("MainTabs");
+        }
+      } catch (err) {
+        console.error("Auth check error:", err);
+        navigation.replace("Login");
+      }
+    }
+
+    const timer = setTimeout(checkState, 1400);
     return () => clearTimeout(timer);
   }, [navigation]);
 
