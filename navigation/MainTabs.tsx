@@ -3,7 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { DashboardScreen } from "../screens/DashboardScreen";
 import { NotificationsScreen } from "../screens/NotificationsScreen";
-import { ScheduleScreen } from "../screens/ScheduleScreen.tsx";
+import { ScheduleScreen } from "../screens/ScheduleScreen";
 import { ProfileScreen } from "../screens/ProfileScreen";
 
 type TabsParamList = {

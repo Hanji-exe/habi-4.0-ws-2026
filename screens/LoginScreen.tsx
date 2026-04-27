@@ -80,13 +80,13 @@ export function LoginScreen({ navigation }: Props) {
 
         <View className="mt-4 gap-3">
           <Button
-            label="Login"
+            title="Login"
             onPress={onLogin}
             disabled={!canSubmit}
             loading={loading}
           />
           <TouchableOpacity
-            onPress={() => navigation.navigate("FirstTimeSetUp")}
+            onPress={() => navigation.navigate("Arrival")}
             disabled={loading}
             className="h-12 items-center justify-center rounded-xl border border-violet-600"
           >
