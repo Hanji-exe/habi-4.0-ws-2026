@@ -1,33 +1,64 @@
-import { Pressable, Text, ActivityIndicator } from 'react-native';
+import { Text, TouchableOpacity, ActivityIndicator } from "react-native";
 
 type Props = {
-  label: string;
+  title: string;
   onPress: () => void;
-  disabled?: boolean;
+  variant?: "primary" | "secondary" | "ghost";
   loading?: boolean;
+  disabled?: boolean;
   className?: string;
 };
 
-export function Button({ label, onPress, disabled, loading, className }: Props) {
-  const isDisabled = disabled || loading;
+export function Button({
+  title,
+  onPress,
+  variant = "primary",
+  loading = false,
+  disabled = false,
+  className = "",
+}: Props) {
+  const getVariantStyles = () => {
+    switch (variant) {
+      case "primary":
+        return "bg-mint";
+      case "secondary":
+        return "bg-sage";
+      case "ghost":
+        return "bg-transparent border border-neutral-200";
+      default:
+        return "bg-mint";
+    }
+  };
+
+  const getTextStyle = () => {
+    switch (variant) {
+      case "primary":
+        return "text-white";
+      case "secondary":
+        return "text-charcoal";
+      case "ghost":
+        return "text-charcoal";
+      default:
+        return "text-white";
+    }
+  };
 
   return (
-    <Pressable
-      accessibilityRole="button"
-      disabled={isDisabled}
+    <TouchableOpacity
+      activeOpacity={0.8}
       onPress={onPress}
-      className={[
-        'h-12 flex-row items-center justify-center rounded-xl bg-black px-4',
-        isDisabled ? 'opacity-50' : 'opacity-100',
-        className ?? '',
-      ].join(' ')}
+      disabled={disabled || loading}
+      className={`h-[48px] items-center justify-center rounded-2xl px-6 ${getVariantStyles()} ${
+        disabled ? "opacity-50" : ""
+      } ${className}`}
     >
       {loading ? (
-        <ActivityIndicator color="#fff" />
+        <ActivityIndicator color={variant === "primary" ? "white" : "#2D3748"} />
       ) : (
-        <Text className="text-base font-semibold text-white">{label}</Text>
+        <Text className={`text-base font-bold font-jakarta-bold ${getTextStyle()}`}>
+          {title}
+        </Text>
       )}
-    </Pressable>
+    </TouchableOpacity>
   );
 }
-

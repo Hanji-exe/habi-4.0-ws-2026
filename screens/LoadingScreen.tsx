@@ -8,7 +8,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "Loading">;
 
 export function LoadingScreen({ navigation }: Props) {
   useEffect(() => {
-    const timer = setTimeout(() => navigation.replace("Login"), 1400);
+    const timer = setTimeout(() => navigation.replace("Arrival"), 1400);
     return () => clearTimeout(timer);
   }, [navigation]);
 
