@@ -59,18 +59,34 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: "`systemPrompt` must be a string" }, { status: 400 })
   }
 
+  const contents = messages.reduce((acc, m) => {
+    const role = m.role === "assistant" ? "model" : "user";
+    if (acc.length > 0 && acc[acc.length - 1].role === role) {
+      acc[acc.length - 1].parts[0].text += "\n" + m.content;
+    } else {
+      acc.push({ role, parts: [{ text: m.content }] });
+    }
+    return acc;
+  }, [] as any[]);
+
+  // Gemini requires the conversation to start with a 'user' message
+  if (contents.length > 0 && contents[0].role === "model") {
+    contents.shift();
+  }
+
+  if (contents.length === 0) {
+    return jsonResponse({ error: "Conversation must contain at least one user message" }, { status: 400 })
+  }
+
   const geminiPayload = {
     ...(systemPrompt?.trim()
       ? { systemInstruction: { parts: [{ text: systemPrompt.trim() }] } }
       : {}),
-    contents: messages.map((m) => ({
-      role: m.role === "assistant" ? "model" : "user",
-      parts: [{ text: m.content }],
-    })),
+    contents,
   }
 
   const url =
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash:generateContent?key=${encodeURIComponent(geminiApiKey)}`
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(geminiApiKey)}`
 
   let upstream: Response
   try {
@@ -120,6 +136,6 @@ Deno.serve(async (req) => {
   curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/ai-assistantcopy' \
     --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
     --header 'Content-Type: application/json' \
-    --data '{"name":"Functions"}'
+    --data '{"messages": [{"role": "user", "content": "Hello, how are you?"}]}'
 
 */

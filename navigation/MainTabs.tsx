@@ -3,11 +3,13 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { DashboardScreen } from "../screens/DashboardScreen";
 import { NotificationsScreen } from "../screens/NotificationsScreen";
+import { ScheduleScreen } from "../screens/ScheduleScreen";
 import { ProfileScreen } from "../screens/ProfileScreen";
 
 type TabsParamList = {
   Home: undefined;
   Notifications: undefined;
+  Schedule: undefined;
   Profile: undefined;
 };
 
@@ -30,7 +32,9 @@ export function MainTabs() {
               ? "home-outline"
               : route.name === "Notifications"
                 ? "notifications-outline"
-                : "person-outline";
+                : route.name === "Schedule"
+                  ? "calendar-outline"
+                  : "person-outline";
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -38,6 +42,7 @@ export function MainTabs() {
     >
       <Tab.Screen name="Home" component={DashboardScreen} />
       <Tab.Screen name="Notifications" component={NotificationsScreen} />
+      <Tab.Screen name="Schedule" component={ScheduleScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );

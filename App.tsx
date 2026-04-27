@@ -4,12 +4,12 @@ import "./global.css";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { 
-  useFonts, 
-  PlusJakartaSans_400Regular, 
-  PlusJakartaSans_700Bold 
+import {
+  useFonts,
+  PlusJakartaSans_400Regular,
+  PlusJakartaSans_700Bold,
 } from "@expo-google-fonts/plus-jakarta-sans";
-import * as SplashScreen from 'expo-splash-screen';
+import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
 import { RootNavigator } from "./navigation/RootNavigator";

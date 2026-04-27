@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "./types";
 import { LoadingScreen } from "../screens/LoadingScreen";
 import { LoginScreen } from "../screens/LoginScreen";
-import { FirstTimeSetUp } from "../screens/FirstTimeSetUp";
 import { MainTabs } from "./MainTabs";
 import { ArrivalScreen } from "../screens/onboarding/ArrivalScreen";
 import { IdentityScreen } from "../screens/onboarding/IdentityScreen";
@@ -22,7 +21,6 @@ export function RootNavigator() {
     >
       <Stack.Screen name="Loading" component={LoadingScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="FirstTimeSetUp" component={FirstTimeSetUp} />
       <Stack.Screen name="MainTabs" component={MainTabs} />
 
       {/* Onboarding Flow */}
