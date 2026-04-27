@@ -3,5 +3,9 @@ export type RootStackParamList = {
   Login: undefined;
   MainTabs: undefined;
   FirstTimeSetUp: undefined;
+  Arrival: undefined;
+  Identity: undefined;
+  ProfileContext: undefined;
+  HealthContext: undefined;
+  Ready: undefined;
 };
-

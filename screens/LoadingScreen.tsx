@@ -3,7 +3,6 @@ import { ActivityIndicator, Text, View } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import type { RootStackParamList } from "../navigation/types.ts";
-
 import { supabase } from "../lib/supabase";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Loading">;
@@ -15,12 +14,12 @@ export function LoadingScreen({ navigation }: Props) {
         const { data: { session } } = await supabase.auth.getSession();
 
         if (!session) {
+          // If no session, go to Login
           navigation.replace("Login");
           return;
         }
 
         // Check if user has completed onboarding
-        // Note: We use .maybeSingle() to handle cases where the profile doesn't exist yet
         const { data: profile, error } = await supabase
           .from("profiles")
           .select("onboarding_completed")
@@ -28,8 +27,10 @@ export function LoadingScreen({ navigation }: Props) {
           .maybeSingle();
 
         if (error || !profile?.onboarding_completed) {
-          navigation.replace("FirstTimeSetUp");
+          // If profile error or not completed, start your new Onboarding Journey
+          navigation.replace("Arrival");
         } else {
+          // If everything is ready, go to Dashboard
           navigation.replace("MainTabs");
         }
       } catch (err) {
