@@ -1,14 +1,14 @@
-import { useEffect } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useEffect } from "react";
+import { ActivityIndicator, Text, View } from "react-native";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import type { RootStackParamList } from '../navigation/types.ts';
+import type { RootStackParamList } from "../navigation/types.ts";
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Loading'>;
+type Props = NativeStackScreenProps<RootStackParamList, "Loading">;
 
 export function LoadingScreen({ navigation }: Props) {
   useEffect(() => {
-    const timer = setTimeout(() => navigation.replace('Login'), 1400);
+    const timer = setTimeout(() => navigation.replace("Login"), 1400);
     return () => clearTimeout(timer);
   }, [navigation]);
 
@@ -25,4 +25,3 @@ export function LoadingScreen({ navigation }: Props) {
     </View>
   );
 }
-
